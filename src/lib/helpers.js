@@ -11,8 +11,9 @@ const ALPHABET = [
   "8", "9"
 ];
 
-const SEX_MALE = "male";
-const SEX_FEMALE = "female";
+const UNDEFINED = "undefined";
+const MALE = "male";
+const FEMALE = "female";
 
 const CASING_LOWERCASE = "lowercase";
 const CASING_TITLE = "title";
@@ -37,8 +38,9 @@ module.exports = {
   FEMALE_FIRSTNAMES,
   LASTNAMES,
   ALPHABET,
-  SEX_MALE,
-  SEX_FEMALE,
+  UNDEFINED,
+  MALE,
+  FEMALE,
   CASING_LOWERCASE,
   CASING_TITLE,
   CASING_UPPERCASE,

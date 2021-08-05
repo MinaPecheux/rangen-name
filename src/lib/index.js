@@ -6,8 +6,9 @@ const generator = require("./generator.js");
 module.exports = {
   VERSION: pkg.version,
   CONSTANTS: {
-    MALE: helpers.SEX_MALE,
-    FEMALE: helpers.SEX_FEMALE,
+    UNDEFINED: helpers.UNDEFINED,
+    MALE: helpers.MALE,
+    FEMALE: helpers.FEMALE,
     CASING_LOWERCASE: helpers.CASING_LOWERCASE,
     CASING_TITLE: helpers.CASING_TITLE,
     CASING_UPPERCASE: helpers.CASING_UPPERCASE,

@@ -69,12 +69,14 @@ const _applyCasing = (casing, subject) => {
 };
 
 const generateFirstname = ({
-  sex = helpers.SEX_FEMALE,
+  sex = helpers.UNDEFINED,
   casing = helpers.CASING_TITLE
 } = {}) => {
   if (countTable === null) _initialize();
+  if (sex === helpers.UNDEFINED)
+    sex = Math.random() < 0.5 ? helpers.FEMALE : helpers.MALE;
   let firstname = helpers.getRandomItem(
-    sex === helpers.SEX_FEMALE ? femaleFirstnames : maleFirstnames
+    sex === helpers.FEMALE ? femaleFirstnames : maleFirstnames
   );
   firstname = _applyCasing(casing, firstname);
   return firstname;
@@ -132,7 +134,7 @@ const generateLastname = ({
 };
 
 const generateFullName = ({
-  sex = helpers.SEX_FEMALE,
+  sex = helpers.UNDEFINED,
   casing = helpers.CASING_TITLE,
   maxLength = 10,
   stopThreshold = 0.75,
