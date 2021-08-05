@@ -12,7 +12,7 @@ const ALPHABET = [
 ];
 
 const SEX_MALE = "male";
-const SEX_FEMALE = "male";
+const SEX_FEMALE = "female";
 
 const CASING_LOWERCASE = "lowercase";
 const CASING_TITLE = "title";
