@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "filenames"
+  ],
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "rules": {
+    // "curly": "error",
+    "filenames/match-regex": ["error", "^(_?[a-z0-9]+)([a-z0-9.-]+)$"],
+    "indent": ["error", 2],
+    "no-console": "off",
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"]
+  },
+  "ignorePatterns": [
+    "!.eslintrc",
+    "dist",
+    "node_modules",
+    "docs"
+  ]
+}
