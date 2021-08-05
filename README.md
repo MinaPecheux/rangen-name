@@ -10,7 +10,18 @@ The lib provides you with 3 functions:
 - the `generateLastname()`: uses a 3-step Markov Chain process to create a random (but plausible) surname
 - the `generateFullName()`: combines a firstname and lastname (with the previous rules) to get a full name
 
-In a Node context, you can import the package using the `require` keyword:
+### Installing via NPM
+
+You can install it via NPM (or Yarn):
+
+```
+npm install @mpecheux/rangen-name
+
+# or
+# yarn add @mpecheux/rangen-name
+```
+
+In a Node context, you can then import the package using the `require` keyword:
 
 ```js
 const rangenName = require("@mpecheux/rangen-name");
@@ -30,7 +41,9 @@ console.log(name);
 // Vincent Bows
 ```
 
-And you can also use the CDN versions:
+### Using CDN versions
+
+You can also use the CDN versions directly if you don't want to install anything:
 
 ```html
 <!DOCTYPE html>
@@ -58,6 +71,8 @@ And you can also use the CDN versions:
 </body>
 </html>
 ```
+
+(Or download them and put them in your project as local dependencies ;) )
 
 ## API
 
