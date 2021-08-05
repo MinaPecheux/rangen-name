@@ -1,9 +1,7 @@
-const path = require("path");
 const commonjs = require("@rollup/plugin-commonjs");
 const json = require("@rollup/plugin-json");
 const { nodeResolve } = require("@rollup/plugin-node-resolve");
 const { terser } = require("rollup-plugin-terser");
-const postcss = require("rollup-plugin-postcss");
 
 module.exports = [
   {
@@ -11,7 +9,8 @@ module.exports = [
     output: [
       {
         file: "dist/rangen-name.umd.js",
-        format: "cjs"
+        format: "cjs",
+        exports: "auto"
       }, {
         file: "dist/rangen-name.min.js",
         format: "iife",
@@ -22,10 +21,7 @@ module.exports = [
     plugins: [
       nodeResolve(),
       commonjs(),
-      json(),
-      postcss({
-        extract: path.resolve("dist/styles/main.css")
-      })
+      json()
     ]
   },
 
