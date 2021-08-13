@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/MinaPecheux/rangen-name/compare/v0.1.1...v0.1.2) (2021-08-13)
+
+
+### Features
+
+* **core:** add option for custom firstname/lastname reference lists ([ca87d63](https://github.com/MinaPecheux/rangen-name/commit/ca87d632940bee483521a72c9f620ad097a37ba6))
+* **docs:** update readme with custom reference lists info ([c0c22a1](https://github.com/MinaPecheux/rangen-name/commit/c0c22a126aeaa895e0491ae763eb7e0109bb2528))
+
 ### 0.1.1 (2021-08-05)
 
 
