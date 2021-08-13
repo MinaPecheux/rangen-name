@@ -4,15 +4,12 @@ var
   countTable = null,
   nameStarts = null,
   nameEnds = null,
-  maleFirstnames = [],
-  femaleFirstnames = [];
+  currentLastnameReferenceList = null;
 
-const _initialize = () => {
-  // store possible firstnames
-  maleFirstnames = helpers.MALE_FIRSTNAMES;
-  femaleFirstnames = helpers.FEMALE_FIRSTNAMES;
-
-  const names = helpers.LASTNAMES;
+const _initialize = ({ lastnameReferenceList = null } = {}) => {
+  const names = lastnameReferenceList || helpers.LASTNAMES;
+  if (lastnameReferenceList)
+    currentLastnameReferenceList = lastnameReferenceList;
   countTable = {};
   for (const c1 of helpers.ALPHABET) {
     const d2 = {};
@@ -70,11 +67,16 @@ const _applyCasing = (casing, subject) => {
 
 const generateFirstname = ({
   sex = helpers.UNDEFINED,
-  casing = helpers.CASING_TITLE
+  casing = helpers.CASING_TITLE,
+  maleFirstnameReferenceList = null,
+  femaleFirstnameReferenceList = null,
 } = {}) => {
-  if (countTable === null) _initialize();
   if (sex === helpers.UNDEFINED)
     sex = Math.random() < 0.5 ? helpers.FEMALE : helpers.MALE;
+
+  // get possible firstnames
+  const maleFirstnames = maleFirstnameReferenceList || helpers.MALE_FIRSTNAMES;
+  const femaleFirstnames = femaleFirstnameReferenceList || helpers.FEMALE_FIRSTNAMES;
   let firstname = helpers.getRandomItem(
     sex === helpers.FEMALE ? femaleFirstnames : maleFirstnames
   );
@@ -86,8 +88,10 @@ const generateLastname = ({
   casing = helpers.CASING_TITLE,
   maxLength = 10,
   stopThreshold = 0.75,
+  lastnameReferenceList = null,
 } = {}) => {
-  if (countTable === null) _initialize();
+  if (countTable === null || !helpers.arraysAreEqual(lastnameReferenceList, currentLastnameReferenceList))
+    _initialize({ lastnameReferenceList });
 
   // get random probable start
   let lastname = helpers.getRandomItem(helpers.repeatItems(nameStarts));
@@ -138,9 +142,22 @@ const generateFullName = ({
   casing = helpers.CASING_TITLE,
   maxLength = 10,
   stopThreshold = 0.75,
+  maleFirstnameReferenceList = null,
+  femaleFirstnameReferenceList = null,
+  lastnameReferenceList = null,
 } = {}) => {
-  const firstname = generateFirstname({ sex, casing });
-  const lastname = generateLastname({ casing, maxLength, stopThreshold });
+  const firstname = generateFirstname({
+    sex,
+    casing,
+    maleFirstnameReferenceList,
+    femaleFirstnameReferenceList
+  });
+  const lastname = generateLastname({
+    casing,
+    maxLength,
+    stopThreshold,
+    lastnameReferenceList
+  });
   return `${firstname} ${lastname}`;
 };
 

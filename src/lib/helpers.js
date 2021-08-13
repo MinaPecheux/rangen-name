@@ -19,6 +19,17 @@ const CASING_LOWERCASE = "lowercase";
 const CASING_TITLE = "title";
 const CASING_UPPERCASE = "uppercase";
 
+const arraysAreEqual = (a1, a2) => {
+  if (a1 === a2) return true;
+  if (a1 == null || a2 == null) return false;
+  if (a1.length !== a2.length) return false;
+
+  for (let i = 0; i < a1.length; i++) {
+    if (a1[i] !== a2[i]) return false;
+  }
+  return true;
+};
+
 const getRandomItem = (items) => {
   return items[Math.floor(Math.random() * items.length)];
 };
@@ -44,6 +55,7 @@ module.exports = {
   CASING_LOWERCASE,
   CASING_TITLE,
   CASING_UPPERCASE,
+  arraysAreEqual,
   getRandomItem,
   repeatItems,
 };
