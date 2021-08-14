@@ -2,6 +2,7 @@ const pkg = require("../../package.json");
 
 const helpers = require("./helpers.js");
 const generator = require("./generator.js");
+const visualizer = require("./visualizer.js");
 
 module.exports = {
   VERSION: pkg.version,
@@ -16,4 +17,5 @@ module.exports = {
   generateFirstname: generator.generateFirstname,
   generateLastname: generator.generateLastname,
   generateFullName: generator.generateFullName,
+  exportProbabilityMatrix: visualizer.exportProbabilityMatrix,
 };

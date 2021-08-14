@@ -44,6 +44,23 @@ const repeatItems = (itemRepetitions) => {
   return items;
 };
 
+const normalizeProbabilityMatrix = (refMatrix) => {
+  const matrix = {};
+  for (const k1 of Object.keys(refMatrix)) {
+    const d2 = {};
+    for (const k2 of Object.keys(refMatrix[k1])) {
+      const d3 = {};
+      const s = Object.values(refMatrix[k1][k2]).reduce((acc, v) => acc + v, 0);
+      for (const [k3, v] of Object.entries(refMatrix[k1][k2])) {
+        d3[k3] = v * 1.0 / s;
+      }
+      d2[k2] = d3;
+    }
+    matrix[k1] = d2;
+  }
+  return matrix;
+};
+
 module.exports = {
   MALE_FIRSTNAMES,
   FEMALE_FIRSTNAMES,
@@ -58,4 +75,5 @@ module.exports = {
   arraysAreEqual,
   getRandomItem,
   repeatItems,
+  normalizeProbabilityMatrix,
 };
