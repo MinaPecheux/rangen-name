@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/MinaPecheux/rangen-name/compare/v0.1.2...v0.1.3) (2021-08-14)
+
+
+### Features
+
+* **core:** add proba matrix export to png as heatmaps ([93da457](https://github.com/MinaPecheux/rangen-name/commit/93da45798c864e9a23bd3d78f45be9e49aa14a73))
+* **docs:** update readme with matrix visualisation info ([75132d5](https://github.com/MinaPecheux/rangen-name/commit/75132d5dc0a1bd3c8dc598387986c0715d82eeb5))
+* **visualizer:** add generatorName option to add label on image ([a2e74a6](https://github.com/MinaPecheux/rangen-name/commit/a2e74a6b23ef767e1a77bb45a0d643e56a9090a8))
+
+
+### Bug Fixes
+
+* **core:** move generator vars to obj context + fix name ends retrieval ([6a22654](https://github.com/MinaPecheux/rangen-name/commit/6a226541f6884ed6979de8c7da434f175342fbf3))
+* **core:** update rollup config to use node builtins ([5235f2e](https://github.com/MinaPecheux/rangen-name/commit/5235f2e860dfb51c6aa2d0cd67e4b692ca26ea8f))
+* **pkg:** fix package tags ([045764a](https://github.com/MinaPecheux/rangen-name/commit/045764a3069810a529502f0b66c884464944aad3))
+
 ### [0.1.2](https://github.com/MinaPecheux/rangen-name/compare/v0.1.1...v0.1.2) (2021-08-13)
 
 

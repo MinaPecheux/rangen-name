@@ -1,7 +1,7 @@
 {
   "name": "@mpecheux/rangen-name",
   "description": "Rangen is a suite of random generators and procedural generation tools; rangen-name focuses on name generation.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "license": "MIT",
   "main": "./dist/rangen-name.umd.js",
