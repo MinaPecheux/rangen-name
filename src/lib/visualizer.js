@@ -9,7 +9,7 @@ const CELL_SIZE = 12;
 const CELL_SPACING = 2;
 const MARGIN = 40;
 
-const getCanvasFrom2DArray = (alphabet, symbol, probabilities) => {
+const getCanvasFrom2DArray = (alphabet, generatorName, symbol, probabilities) => {
   const imgSize = MARGIN * 2 + CELL_SIZE * alphabet.length + CELL_SPACING * (alphabet.length - 1);
 
   const canvas = createCanvas(imgSize, imgSize);
@@ -44,11 +44,21 @@ const getCanvasFrom2DArray = (alphabet, symbol, probabilities) => {
   ctx.fillStyle = "black";
   const w = ctx.measureText(symbol).width;
   ctx.fillText(symbol, imgSize - MARGIN - w, imgSize - MARGIN);
+  
+  if (generatorName !== null) {
+    ctx.font = "bold 10pt Arial";
+    const w = ctx.measureText(symbol).width;
+    ctx.fillText(generatorName, imgSize - MARGIN - w, imgSize - MARGIN / 2);
+  }
 
   return canvas;
 };
 
-const exportProbabilityMatrix = ({ folderPath = "./probability-matrix", onlyLetters = true } = {}) => {
+const exportProbabilityMatrix = ({
+  folderPath = "./probability-matrix",
+  onlyLetters = true,
+  generatorName = null,
+} = {}) => {
   const matrix = normalizeProbabilityMatrix(context.countTable, context.nItems);
   if (fs.existsSync(folderPath))
     fs.rmdirSync(folderPath, { recursive: true, force: true });
@@ -57,7 +67,7 @@ const exportProbabilityMatrix = ({ folderPath = "./probability-matrix", onlyLett
   let alphabet = [...ALPHABET];
   if (onlyLetters) alphabet = alphabet.slice(0, 26);
   for (let i = 0; i < alphabet.length; i++) {
-    const canvas = getCanvasFrom2DArray(alphabet, alphabet[i], matrix[alphabet[i]]);  
+    const canvas = getCanvasFrom2DArray(alphabet, generatorName, alphabet[i], matrix[alphabet[i]]);  
     const buffer = canvas.toBuffer("image/png");
     fs.writeFileSync(path.join(folderPath, `${i.toString().padStart(2, "0")}-${alphabet[i]}.png`), buffer);
   }
