@@ -49,9 +49,9 @@ You can also use the CDN versions directly if you don't want to install anything
 <html lang="en">
 <head>
   <title>Rangen: Name - Demo</title>
-  <script src="https://unpkg.com/@mpecheux/rangen-name@0.1.3/dist/rangen-name.min.js"></script>
+  <script src="https://unpkg.com/@mpecheux/rangen-name@0.1.4/dist/rangen-name.min.js"></script>
   <!-- or:
-    <script src="https://cdn.jsdelivr.net/npm/@mpecheux/rangen-name@0.1.3/dist/rangen-name.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mpecheux/rangen-name@0.1.4/dist/rangen-name.min.js"></script>
   -->
 </head>
 <body>
@@ -164,7 +164,7 @@ for (let i = 0; i < 3; i++)
   console.log(rangenName.generateFullName({
     maleFirstnameReferenceList: ["Akira", "Banzan", "Daido", "Haru", "Ichiro", "Itsu", "Jiro", "Kazuo"],
     femaleFirstnameReferenceList: ["Eido", "Hama", "Hanako", "Iva", "Jin", "Kane", "Kaori", "Kaya"],
-    lastnameReferenceList: greekSurnames
+    lastnameReferenceList: japaneseSurnames
   }));
 // Itsu Oyazawa
 // Jin Mori
