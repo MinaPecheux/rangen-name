@@ -4,12 +4,13 @@ Rangen is a suite of random generators and procedural generation tools; rangen-n
 
 ## TL;DR
 
-The lib provides you with 3 functions:
+The lib provides you with 3 core functions:
 
 - the `generateFirstname()`: gets a random item from lists of common male or female firstnames
 - the `generateLastname()`: uses a 3-step Markov Chain process to create a random (but plausible) surname
 - the `generateFullName()`: combines a firstname and lastname (with the previous rules) to get a full name
 
+And an additional function, `exportProbabilityMatrix()`, to visualise the 3-D probability matrix that is used by the lastame generator (see below for more details).
 ### Installing via NPM
 
 You can install it via NPM (or Yarn):
@@ -26,7 +27,7 @@ const rangenName = require("@mpecheux/rangen-name");
 
 const name = rangenName.generateFullName();
 console.log(name);
-// Karleen Newe
+// Leslie Kitton
 ```
 
 For ES6 JavaScript, use the `import` keyword:
@@ -48,9 +49,9 @@ You can also use the CDN versions directly if you don't want to install anything
 <html lang="en">
 <head>
   <title>Rangen: Name - Demo</title>
-  <script src="https://unpkg.com/@mpecheux/rangen-name@0.1.2/dist/rangen-name.min.js"></script>
+  <script src="https://unpkg.com/@mpecheux/rangen-name@0.1.3/dist/rangen-name.min.js"></script>
   <!-- or:
-    <script src="https://cdn.jsdelivr.net/npm/@mpecheux/rangen-name@0.1.2/dist/rangen-name.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mpecheux/rangen-name@0.1.3/dist/rangen-name.min.js"></script>
   -->
 </head>
 <body>
@@ -72,22 +73,9 @@ You can also use the CDN versions directly if you don't want to install anything
 
 (Or download them and put them in your project as local dependencies ;) )
 
-## API
+## Using custom reference lists
 
-### Util constants
-
-The lib has a list of useful constants you can use in the 3 core functions:
-
-- `UNDEFINED`: "undefined" (50/50% chance of having a female/male name)
-- `MALE`: "male"
-- `FEMALE`: "female"
-- `CASING_LOWERCASE`: "lowercase"
-- `CASING_TITLE`: "title"
-- `CASING_UPPERCASE`: "uppercase"
-
-### Using custom reference lists
-
-#### For firstnames
+### For firstnames
 
 The firstname generator in this package simply picks one firstname at random in given lists of male/female firstnames, depending on the gender of the name you asked for (or with a 50/50% chance of male/female name if you didn't specify anything).
 
@@ -106,7 +94,7 @@ for (let i = 0; i < 7; i++)
 // John
 ```
 
-#### For lastnames
+### For lastnames
 
 The lastname generator, on the other hand, relies on [Markov chains](https://en.wikipedia.org/wiki/Markov_chain); the chain transition probabilities are initialised based on a reference list of common surnames (for more info, check [the Medium article](https://medium.com/codex/generating-random-names-using-maths-8872a8f3b981) I wrote about this lib), and so this reference list is essential in defining the **possible letter sequences** for the generator.
 
@@ -123,13 +111,13 @@ for (let i = 0; i < 7; i++)
   console.log(rangenName.generateLastname({
     lastnameReferenceList: ["Momomomo", "Titititi", "Yuyuyu", "Lalala", "Lololo"]
   }));
-// Yuyuy
-// Lalal
-// Lolol
-// Yuyuy
-// Titit
-// Titit
-// Yuyuyuy
+// Titi
+// Titi
+// Yuyu
+// Yuyu
+// Momomo
+// Lolo
+// Momo
 ```
 
 Remember: the longer your list, the better it is for the generator because it will have more "raw data" to learn from! In my example, there are too few reference strings to make a credible generator.
@@ -144,9 +132,9 @@ for (let i = 0; i < 3; i++)
   console.log(rangenName.generateLastname({
     lastnameReferenceList: greekSurnames
   }));
-// Kel
-// Flostopol
-// Karbar
+// Kambros
+// Balla
+// Poulos
 ```
 
 Or of Japanese lastnames:
@@ -159,12 +147,12 @@ for (let i = 0; i < 3; i++)
   console.log(rangenName.generateLastname({
     lastnameReferenceList: japaneseSurnames
   }));
-// Sairosh
-// Murayaseo
-// Sadachi
+// Higuchi
+// Hata
+// Mura
 ```
 
-#### For full names
+### For full names
 
 The firstnames aren't auto-correlated, but you can naturally combine the two features and pass all the options to the `generateFullName()` function to better "control the randomness" and get more relevant results:
 
@@ -178,10 +166,50 @@ for (let i = 0; i < 3; i++)
     femaleFirstnameReferenceList: ["Eido", "Hama", "Hanako", "Iva", "Jin", "Kane", "Kaori", "Kaya"],
     lastnameReferenceList: greekSurnames
   }));
-// Hama Konondachi
-// Ichiro Ishose
-// Haru Kondoi
+// Itsu Oyazawa
+// Jin Mori
+// Eido Kanamoto
 ```
+
+## Visualising the probability matrix
+
+If you want to understand how the Markov chain of your generator is currently configured, you can export the 3-D matrix as a series of PNG images and visualise the probable letter sequences.
+
+We need to visualise a 3-dimensional object, but it is more readable as "slices": foreach symbol in the alphabet, we show the corresponding 2D sub-probability matrix (i.e. the 2-letters sequence probability if the current character is the one we chose).
+
+Each image is a 2D heatmap grid that shows with white-to-red cells the probability each transition has of occurring:
+
+![proba-matrix_example.png](./imgs/proba-matrix_example.png)
+
+- in the bottom-right corner, you see the current "slice", i.e. the current character `c1` you're at in your generated name
+- then, the rows list the possibilities for the next character `c2`
+- and for each row, the color of the cell at a given column `c3` corresponds to the probability of having the `c1-c2-c3` sequence in your word
+  
+For example, here, we have the heatmap for `c1` = "a". We see that:
+- if `c1` = "a" and `c2` = "a" also, then we're forced to have `c3` = "c": in our reference list, only the sequence "aac" exists
+- but if `c2` = "d", we have lots of different possibilities that are each about as probable: "add", "ade"...
+- we apparently have never encountered a sequence with "ao" in this reference list: there is no possible transition after that!
+
+What's really interesting is to compare the probability matrix for two different reference lists. For example, here, I compare the "a" slice of my 3-D probability matrix for the default reference list of English surnames, and for my reference list of Japanese surnames:
+
+![proba-matrix_comparison.png](./imgs/proba-matrix_comparison.png)
+
+We clearly see that, even though we're using the same letters, the letter sequences are completely different! Meaning that, in turn, the generated names will be widely different too :)
+
+(For example, the sequence "aka" is quite common in Japanese and non-existent in English, while "aha" are quite common in both reference lists!)
+
+## API
+
+### Util constants
+
+The lib has a list of useful constants you can use in the 3 core functions:
+
+- `UNDEFINED`: "undefined" (50/50% chance of having a female/male name)
+- `MALE`: "male"
+- `FEMALE`: "female"
+- `CASING_LOWERCASE`: "lowercase"
+- `CASING_TITLE`: "title"
+- `CASING_UPPERCASE`: "uppercase"
 
 ### `generateFirstname()`
 
@@ -236,7 +264,7 @@ const lastname = rangenName.generateLastname({
   casing: rangenName.CONSTANTS.CASING_LOWERCASE
 });
 console.log(lastname);
-// truckler
+// holdrey
 ```
 
 ## `generateFullName()`
@@ -275,5 +303,30 @@ const fullname = rangenName.generateFullName({
   casing: rangenName.CONSTANTS.CASING_TITLE
 });
 console.log(fullname);
-// Alice Whic
+// Tucker Ward
+```
+
+## `exportProbabilityMatrix()`
+
+Parameters:
+
+- `folderPath`: path to the directory to save the PNG images into
+  
+  [default: "./probability-matrix"]
+- `onlyLetters`: whether to only show the probabilities for the common 26 letters of the alphabet, or to also include all the special symbols (`ï`, `â`, `-`, `.`...)
+  
+  [default: `true`]
+- `generatorName`: specific name of the generator to print in the bottom-right corner of the images
+  
+  [default: `null`]
+
+```js
+// generate at least one lastname to
+// initialize the matrix probability in the lib
+const _ = rangenName.generateLastname();
+rangenName.exportProbabilityMatrix({
+  folderPath: "my-matrix",
+  onlyLetters: true,
+  generatorName: "My generator!"
+});
 ```
