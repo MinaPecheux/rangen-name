@@ -1,16 +1,18 @@
 const helpers = require("./helpers.js");
 
-var
-  countTable = null,
-  nameStarts = null,
-  nameEnds = null,
-  currentLastnameReferenceList = null;
+const context = {
+  countTable: null,
+  nameStarts: null,
+  nameEnds: null,
+  currentLastnameReferenceList: null,
+  nItems: -1,
+};
 
 const _initialize = ({ lastnameReferenceList = null } = {}) => {
   const names = lastnameReferenceList || helpers.LASTNAMES;
   if (lastnameReferenceList)
-    currentLastnameReferenceList = lastnameReferenceList;
-  countTable = {};
+    context.currentLastnameReferenceList = lastnameReferenceList;
+  context.countTable = {};
   for (const c1 of helpers.ALPHABET) {
     const d2 = {};
     for (const c2 of helpers.ALPHABET) {
@@ -20,10 +22,11 @@ const _initialize = ({ lastnameReferenceList = null } = {}) => {
       }
       d2[c2] = d3;
     }
-    countTable[c1] = d2;
+    context.countTable[c1] = d2;
   }
-  nameStarts = {};
-  nameEnds = {};
+  context.nameStarts = {};
+  context.nameEnds = {};
+  context.nItems = 0;
 
   for (const name of names) {
     const n = name.toLowerCase();
@@ -32,24 +35,27 @@ const _initialize = ({ lastnameReferenceList = null } = {}) => {
       // to the matching one in the dict
       if (c === 0) {
         const start = n.substring(0, Math.min(3, n.length));
-        if (start in nameStarts) nameStarts[start]++;
-        else nameStarts[start] = 1;
+        if (start in context.nameStarts) context.nameStarts[start]++;
+        else context.nameStarts[start] = 1;
       }
 
       // mark name end, or add one occurence
       // to the matching one in the dict
       if (c === n.length - 3) {
-        const end = n.substring(0, Math.min(3, n.length));
-        if (end in nameEnds) nameEnds[end]++;
-        else nameEnds[end] = 1;
+        const end = n.substring(c);
+        if (end.length > 0) {
+          if (end in context.nameEnds) context.nameEnds[end]++;
+          else context.nameEnds[end] = 1;
+        }
       }
 
       if (
-        !(n[c] in countTable) ||
-        !(n[c + 1] in countTable[n[c]]) ||
-        !(n[c + 2] in countTable[n[c]][n[c + 1]])
+        !(n[c] in context.countTable) ||
+        !(n[c + 1] in context.countTable[n[c]]) ||
+        !(n[c + 2] in context.countTable[n[c]][n[c + 1]])
       ) continue;
-      countTable[n[c]][n[c + 1]][n[c + 2]]++;
+      context.countTable[n[c]][n[c + 1]][n[c + 2]]++;
+      context.nItems++;
     }
   }
 };
@@ -90,21 +96,24 @@ const generateLastname = ({
   stopThreshold = 0.75,
   lastnameReferenceList = null,
 } = {}) => {
-  if (countTable === null || !helpers.arraysAreEqual(lastnameReferenceList, currentLastnameReferenceList))
+  if (
+    context.countTable === null ||
+    !helpers.arraysAreEqual(lastnameReferenceList, context.currentLastnameReferenceList)
+  )
     _initialize({ lastnameReferenceList });
 
   // get random probable start
-  let lastname = helpers.getRandomItem(helpers.repeatItems(nameStarts));
+  let lastname = helpers.getRandomItem(helpers.repeatItems(context.nameStarts));
 
   // add chars with Markov Chain-like algorithm
   let currentId = 3;
   let pattern, possibilities, nextLetter;
   while (lastname.length < maxLength) {
     if (
-      !(lastname[currentId - 2] in countTable) ||
-      !(lastname[currentId - 1] in countTable[lastname[currentId - 2]])
+      !(lastname[currentId - 2] in context.countTable) ||
+      !(lastname[currentId - 1] in context.countTable[lastname[currentId - 2]])
     ) break;
-    possibilities = helpers.repeatItems(countTable[lastname[currentId - 2]][lastname[currentId - 1]]);
+    possibilities = helpers.repeatItems(context.countTable[lastname[currentId - 2]][lastname[currentId - 1]]);
     if (possibilities.length === 0)
       break;
     nextLetter = helpers.getRandomItem(possibilities);
@@ -112,8 +121,8 @@ const generateLastname = ({
     pattern = lastname.substring(lastname.length - 3);
     // if this is a known word end,
     // try termination
-    if (pattern in nameEnds) {
-      if (nameEnds[pattern] > 1e-4) {
+    if (pattern in context.nameEnds) {
+      if (context.nameEnds[pattern] > 1e-4) {
         const p = Math.random();
         if (p < stopThreshold)
           break;
@@ -123,7 +132,7 @@ const generateLastname = ({
   }
 
   // check for crude ending
-  while (!(lastname.substring(Math.max(0, lastname.length - 3)) in nameEnds)) {
+  while (!(lastname.substring(Math.max(0, lastname.length - 3)) in context.nameEnds)) {
     lastname = lastname.substring(0, lastname.length - 1);
     if (lastname.length === 0)
       lastname = generateLastname({ casing, maxLength, stopThreshold });
@@ -165,4 +174,5 @@ module.exports = {
   generateFirstname,
   generateLastname,
   generateFullName,
+  context,
 };
