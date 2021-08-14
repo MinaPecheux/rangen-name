@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/MinaPecheux/rangen-name/compare/v0.1.3...v0.1.4) (2021-08-14)
+
+
+### Bug Fixes
+
+* **docs:** fix readme example ([4e977e6](https://github.com/MinaPecheux/rangen-name/commit/4e977e6f13f0fc22b08bd927ab1007802b545040))
+
 ### [0.1.3](https://github.com/MinaPecheux/rangen-name/compare/v0.1.2...v0.1.3) (2021-08-14)
 
 
